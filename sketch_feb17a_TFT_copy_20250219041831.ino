@@ -3,10 +3,9 @@
 #define encS2 19
 
 TFT_eSPI tft = TFT_eSPI();
-//TFT_eSprite circle = TFT_eSprite(&tft);
+TFT_eSprite text = TFT_eSprite(&tft);
 
-
-int current = 0;
+static int current = 0;
 int xTemp;
 int x = 60;
 bool curMult = true;
@@ -19,8 +18,7 @@ int curs1, curs2;
 int prevS1;
 bool encFlag = true;
 
-
-void drawCircleOnCur(int x, bool toLow) {
+void drawCircleOnCur(int x, bool toLow) {   //отрисовка линии по краю дисплея
   if (toLow){
     xRad = radians(x + 1);
     circlePosY = 120 + (100 * sin(xRad));
@@ -33,10 +31,17 @@ void drawCircleOnCur(int x, bool toLow) {
     tft.fillCircle(circlePosX, circlePosY, 20, TFT_RED);
 }
 
+void drawVolumeText(int vol){ //отрисовка текстка
+
+
+}
+
 
 void setup() {
   tft.init();
   tft.fillScreen(TFT_BLACK);
+  text.createSprite(120, 40);
+  text.fillSprite(TFT_WHITE);
   pinMode(encS1, INPUT);
   pinMode(encS2, INPUT);
   prevS1 = digitalRead(encS1);
@@ -45,9 +50,7 @@ void setup() {
 
 
 void loop() {
-
   curs1 = digitalRead(encS1);
-
   if (curs1 != prevS1){
     curs2 = digitalRead(encS2);
     if(encFlag){
@@ -63,14 +66,10 @@ void loop() {
       encFlag = !encFlag;
     }
   }
-
-
-
- // if (xTemp == x){
-  //  current = Serial.parseInt();
-  //}
+  
   current = constrain(current, 0, 100);
   xTemp = map(current, 0, 100, 60, 300);
+
   if(xTemp > x){
     x = x + 1;
     drawCircleOnCur(x, false);
@@ -78,7 +77,6 @@ void loop() {
     x = x - 1;
     drawCircleOnCur(x, true);
   }
+
+
 }
-
-
-
